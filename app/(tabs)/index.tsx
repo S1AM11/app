@@ -2,6 +2,7 @@ import {
   Button,
   FlatList,
   Image,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -49,14 +50,61 @@ const HomeScreen = () => {
   const handlePress = () => {
     alert("Transparent Button Pressed!");
   };
+  const [modalVisible, setModalVisible] = useState(false);
 
+  const handleShowComments = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseComments = () => {
+    setModalVisible(false);
+  };
   const renderPost = ({ item }: { item: Post }) => (
     <View style={style.postContainer}>
       <View style={styles.headerContainer}>
         <Image source={{ uri: item.img }} style={styles.profileImage} />
-        <Text style={style.title}>{item.title}</Text>
+        <View>
+          <Text style={style.title}>{item.title}</Text>
+          <View style={styles.headerContainer}>
+            <Text style={style.likes}>Likes: {item.likes}</Text>
+            <View style={commentStyles.commentsRow}>
+              <TouchableOpacity>
+                <Text style={commentStyles.totalComments}>
+                  {item.comments.length > 0
+                    ? ` ${item.comments.length} comments`
+                    : ""}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       </View>
 
+      {/* Modal for Showing All Comments */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCloseComments}
+      >
+        <View style={commentStyles.modalContainer}>
+          <View style={commentStyles.modalContent}>
+            <Text style={commentStyles.modalTitle}>Comments</Text>
+            {item.comments.map((comment) => (
+              <View key={comment.id}>
+                <Text>{comment.author}:</Text>
+                <Text>{comment.content}</Text>
+              </View>
+            ))}
+            <TouchableOpacity
+              onPress={handleCloseComments}
+              style={commentStyles.closeButton}
+            >
+              <Text style={commentStyles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       {/* <Text style={style.content}>{item.content}</Text>
       <Text style={style.author}>Author: {item.author.name}</Text>
       <Text style={style.date}>
@@ -210,23 +258,50 @@ const style = StyleSheet.create({
     color: "#000",
     marginBottom: 12,
   },
-  commentsHeader: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 6,
+});
+const commentStyles = StyleSheet.create({
+  commentsRow: {
+    flexDirection: "row", // Align Likes and Comments in a row
+    justifyContent: "space-between", // Space between items
+    alignItems: "center",
+    marginTop: 10,
   },
-  commentContainer: {
-    marginLeft: 10,
-    marginBottom: 6,
-  },
-  commentAuthor: {
+  commentText: {
     fontSize: 14,
-    fontWeight: "600",
     color: "#555",
   },
-  commentContent: {
+  totalComments: {
     fontSize: 14,
-    color: "#333",
+    color: "#007BFF", // Highlight the "View all comments" link
+    textDecorationLine: "underline",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+  },
+  modalContent: {
+    width: "90%",
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#007BFF",
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 
