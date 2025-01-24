@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Image } from "react-native";
 import { StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import { View } from "react-native";
 
@@ -19,8 +20,13 @@ const ChangeProfile = () => {
   return (
     <View style={styles.container}>
       {/* Input for First Name */}
-
       <Text>change profile</Text>
+      <Image
+        source={{
+          uri: "https://i.pinimg.com/736x/34/94/6c/34946cc6f6a84e6f83608df3ced96c20.jpg",
+        }}
+        style={styles.image}
+      />
       <Text style={styles.label}>First Name</Text>
       <TextInput
         style={styles.input}
@@ -93,6 +99,13 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  image: {
+    width: 150, // Width of the image
+    height: 150, // Height of the image
+    borderRadius: 75, // Makes the image circular
+    borderWidth: 2,
+    borderColor: "#007BFF",
   },
 });
 export default ChangeProfile;
