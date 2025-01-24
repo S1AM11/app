@@ -27,6 +27,7 @@ export default function TabLayout() {
         }),
       }}
     >
+      {/* this is comunity Forum */}
       <Tabs.Screen
         name="index"
         options={{
@@ -36,6 +37,27 @@ export default function TabLayout() {
           ),
         }}
       />
+      {/* this is home page  */}
+      <Tabs.Screen
+        name="homePage"
+        options={{
+          title: "Homepage",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="house.fill" color={color} />
+          ),
+        }}
+      />
+      {/* this is Change profile page  */}
+      <Tabs.Screen
+        name="changeProfile"
+        options={{
+          title: "ChangeProfile",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="house.fill" color={color} />
+          ),
+        }}
+      />
+      {/* thi is is quizzes page  */}
       <Tabs.Screen
         name="quizzes"
         options={{
@@ -45,7 +67,7 @@ export default function TabLayout() {
           ),
         }}
       />
-
+      {/*  this page not use yet  */}
       <Tabs.Screen
         name="explore"
         options={{

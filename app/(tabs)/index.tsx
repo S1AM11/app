@@ -68,7 +68,7 @@ const HomeScreen = () => {
           <View style={styles.headerContainer}>
             <Text style={style.likes}>Likes: {item.likes}</Text>
             <View style={commentStyles.commentsRow}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleShowComments}>
                 <Text style={commentStyles.totalComments}>
                   {item.comments.length > 0
                     ? ` ${item.comments.length} comments`
