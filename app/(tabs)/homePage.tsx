@@ -7,8 +7,8 @@ const HomePage = () => {
   const navigation = useNavigation();
 
   // Function to navigate to the Community Forum tab
-  const handleNavigateToForum = () => {
-    // navigation.navigate("CommunityForumTab"); // Replace with the exact tab name
+  const handleNavigateToForum = (value: string) => {
+    navigation.navigate(value); // Replace with the exact tab name
   };
 
   return (
@@ -18,10 +18,30 @@ const HomePage = () => {
       <Image></Image>
       <View>
         <ThemedText style={styles.text}>Dictionary</ThemedText>
-        <ThemedText style={styles.text}>Community Forum</ThemedText>
-        <ThemedText style={styles.text}>Quizzes</ThemedText>
-        <ThemedText style={styles.text}>Gamification</ThemedText>
-        <ThemedText style={styles.text}>Content</ThemedText>
+        <ThemedText
+          style={styles.text}
+          onPress={() => handleNavigateToForum("homeScreen")}
+        >
+          Community Forum
+        </ThemedText>
+        <ThemedText
+          style={styles.text}
+          onPress={() => handleNavigateToForum("quizzes")}
+        >
+          Quizzes
+        </ThemedText>
+        <ThemedText
+          style={styles.text}
+          onPress={() => handleNavigateToForum("gamification")}
+        >
+          Gamification
+        </ThemedText>
+        <ThemedText
+          style={styles.text}
+          onPress={() => handleNavigateToForum("changePage")}
+        >
+          ChangePage
+        </ThemedText>
       </View>
 
       {/* Buttons */}
