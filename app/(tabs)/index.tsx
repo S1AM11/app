@@ -1,74 +1,233 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import {
+  Button,
+  FlatList,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import React, { useEffect, useState } from "react";
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+import lanForumData from "../data/lanForum.json";
+
+interface Comment {
+  id: number;
+  author: string;
+  content: string;
+  createdAt: string;
 }
 
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  img: string;
+  author: {
+    id: number;
+    name: string;
+    email: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  tags: string[];
+  likes: number;
+  comments: Comment[];
+}
+
+const HomeScreen = () => {
+  const [data, setData] = useState<Post[]>([]); // To store fetched data
+
+  useEffect(() => {
+    setData(lanForumData); // Directly set the imported data
+    console.log(lanForumData); // Log the data to verify
+  }, []);
+
+  // this is for thr btn function
+  const handlePress = () => {
+    alert("Transparent Button Pressed!");
+  };
+
+  const renderPost = ({ item }: { item: Post }) => (
+    <View style={style.postContainer}>
+      <View style={styles.headerContainer}>
+        <Image source={{ uri: item.img }} style={styles.profileImage} />
+        <Text style={style.title}>{item.title}</Text>
+      </View>
+
+      {/* <Text style={style.content}>{item.content}</Text>
+      <Text style={style.author}>Author: {item.author.name}</Text>
+      <Text style={style.date}>
+        Created At: {new Date(item.createdAt).toDateString()}
+      </Text>
+      <Text style={style.tags}>Tags: {item.tags.join(", ")}</Text>
+      <Text style={style.likes}>Likes: {item.likes}</Text>
+
+      <Text style={style.commentsHeader}>Comments:</Text>
+      {item.comments.map((comment) => (
+        <View key={comment.id} style={style.commentContainer}>
+          <Text style={style.commentAuthor}>{comment.author}:</Text>
+          <Text style={style.commentContent}>{comment.content}</Text>
+        </View>
+      ))} */}
+    </View>
+  );
+
+  return (
+    <ScrollView style={styles.scrollContainer}>
+      <View style={styles.containerDiv}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.textDiv}>LinguaLearner Forums</Text>
+          <Image
+            source={require("@/assets/images/partial-react-logo.png")}
+            style={styles.profileImage}
+          />
+        </View>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity style={styles.button} onPress={handlePress}>
+            <Text style={styles.buttonText}>Popular</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handlePress}>
+            <Text style={styles.buttonText}>New</Text>
+          </TouchableOpacity>{" "}
+          <TouchableOpacity style={styles.button} onPress={handlePress}>
+            <Text style={styles.buttonText}>Followed</Text>
+          </TouchableOpacity>
+        </View>
+        <FlatList
+          data={data} // Pass the data to FlatList
+          keyExtractor={(item) => item.id.toString()} // Unique key for each post
+          renderItem={renderPost} // Render each post using renderPost
+          scrollEnabled={false} // Let ScrollView handle the scrolling
+        />
+      </View>
+    </ScrollView>
+  );
+};
+
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  button: {
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: "black",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
-  stepContainer: {
-    gap: 8,
+  buttonText: {
+    color: "black",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  containerDiv: {
+    marginTop: 20,
+    padding: 10,
+  },
+  postContainer: {
+    padding: 15,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 10,
+    backgroundColor: "#f9f9f9",
+  },
+  postTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  postContent: {
+    fontSize: 16,
+    color: "#555",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+    marginBottom: 20,
+  },
+  textDiv: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
 });
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#fff",
+  },
+  postContainer: {
+    padding: 15,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 10,
+    backgroundColor: "#FAE9E9",
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  content: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  author: {
+    fontSize: 14,
+    color: "#555",
+    marginBottom: 4,
+  },
+  date: {
+    fontSize: 14,
+    color: "#777",
+    marginBottom: 8,
+  },
+  tags: {
+    fontSize: 14,
+    color: "#333",
+    marginBottom: 8,
+  },
+  likes: {
+    fontSize: 14,
+    color: "#000",
+    marginBottom: 12,
+  },
+  commentsHeader: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 6,
+  },
+  commentContainer: {
+    marginLeft: 10,
+    marginBottom: 6,
+  },
+  commentAuthor: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#555",
+  },
+  commentContent: {
+    fontSize: 14,
+    color: "#333",
+  },
+});
+
+export default HomeScreen;
